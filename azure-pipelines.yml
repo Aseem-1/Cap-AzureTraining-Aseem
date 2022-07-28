@@ -17,3 +17,12 @@ steps:
   inputs:
     command: 'init'
     allowTelemetryCollection: true
+- task: TerraformCLI@0
+  inputs:
+    command: 'validate'
+    allowTelemetryCollection: true
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'plan'
+    allowTelemetryCollection: true
