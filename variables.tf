@@ -5,7 +5,8 @@ variable "location" {
   type        = list(string)
   description = "Azure Region"
   default = ["UK South",
-  "France Central"]
+ # "France Central"
+ ]
 }
 
 variable "azure_resource_group_name" {
