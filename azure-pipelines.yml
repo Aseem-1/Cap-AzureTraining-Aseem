@@ -41,6 +41,7 @@ jobs:
 
 - job: Terraform_Plan
   displayName: 'Terraform Plan'
+  dependsOn: Terraform_Validate
   steps:
     - task: TerraformInstaller@0
     displayName: 'Terraform installer'
@@ -70,6 +71,7 @@ inputs:
 
 - job: Terraform_Apply
   displayName: 'Terraform Apply'
+  dependsOn: Terraform_Plan
   steps:
     - task: TerraformInstaller@0
     displayName: 'Terraform installer'
