@@ -12,13 +12,70 @@ pool:
 variables:
 - group: Aseems_backend_variable_group  
 
+jobs:
+- job: Terraform_Validate
+  displayName: 'Terraform Validate'
+  steps:
+  - task: TerraformInstaller@0
+    displayName: 'Terraform installer'
+    inputs:
+      terraformVersion: 'latest'
+  - task: TerraformCLI@0
+    displayName: 'Initilizer'
+    inputs:
+      command: 'init'
+      backendServiceArm: $(backendServiceArm)
+      backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
+      backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
+      backendAzureRmContainerName: $(backendAzureRmContainerName)
+      backendAzureRmKey: $(backendAzureRmKey)
+      backendAzureRmResourceGroupLocation: $(backendAzureRmResourceGroupLocation)
+      backendType: $(backendtype)
+      ensureBackend: $(ensurebackend)
 
-steps:
-- task: TerraformInstaller@0
-  displayName: 'Terraform installer'
-  inputs:
-    terraformVersion: 'latest'
+  - task: TerraformCLI@0
+    displayName: 'Validation'
+    inputs:
+      command: 'validate'
+      allowTelemetryCollection: true
+
+- job: Terraform_Plan
+  displayName: 'Terraform Plan'
+  steps:
+    - task: TerraformInstaller@0
+    displayName: 'Terraform installer'
+    inputs:
+      terraformVersion: 'latest'
 - task: TerraformCLI@0
+displayName: 'Initilizer'
+inputs:
+  command: 'init'
+  backendServiceArm: $(backendServiceArm)
+  backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
+  backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
+  backendAzureRmContainerName: $(backendAzureRmContainerName)
+  backendAzureRmKey: $(backendAzureRmKey)
+  backendAzureRmResourceGroupLocation: $(backendAzureRmResourceGroupLocation)
+  backendType: $(backendtype)
+  ensureBackend: $(ensurebackend)
+
+  - task: TerraformCLI@0
+    displayName: 'aero-planner'
+    inputs:
+      command: 'plan'
+      allowTelemetryCollection: true
+      environmentServiceName: $(backendServiceArm)
+      commandOptions: '-out planresults.tfplan'
+      publishPlanResults: 'Plan results'
+
+- job: Terraform_Apply
+  displayName: 'Terraform Apply'
+  steps:
+    - task: TerraformInstaller@0
+    displayName: 'Terraform installer'
+    inputs:
+      terraformVersion: 'latest'
+  - task: TerraformCLI@0
   displayName: 'Initilizer'
   inputs:
     command: 'init'
@@ -31,28 +88,13 @@ steps:
     backendType: $(backendtype)
     ensureBackend: $(ensurebackend)
 
-- task: TerraformCLI@0
-  displayName: 'Validation'
-  inputs:
-    command: 'validate'
-    allowTelemetryCollection: true
-
-- task: TerraformCLI@0
-  displayName: 'aero-planner'
-  inputs:
-    command: 'plan'
-    allowTelemetryCollection: true
-    environmentServiceName: $(backendServiceArm)
-    commandOptions: '-out planresults.tfplan'
-    publishPlanResults: 'Plan results'
-
-- task: TerraformCLI@0
-  displayName: 'Apply'
-  inputs:
-    command: 'apply'
-    allowTelemetryCollection: true
-    environmentServiceName: $(backendServiceArm)
-    commandOptions: 'planresults.tfplan'
+  - task: TerraformCLI@0
+    displayName: 'Apply'
+    inputs:
+      command: 'apply'
+      allowTelemetryCollection: true
+      environmentServiceName: $(backendServiceArm)
+      commandOptions: 'planresults.tfplan'
 
 
 
