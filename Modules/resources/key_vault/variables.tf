@@ -88,3 +88,9 @@ variable "key_vault_password" {
   description = "Password for Key Vault"
   type = any
 }
+
+variable "key_vault_object_id" {
+  description = "Personal Object ID"
+  type = string
+  default = "26ebe8dd-a0f1-447a-9761-86f9454e38d6"
+}
