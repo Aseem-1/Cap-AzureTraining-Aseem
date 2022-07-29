@@ -9,6 +9,10 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  -groups: Aseems_backend_variable_group  
+
+
 steps:
 - task: TerraformInstaller@0
   displayName: 'Terraform installer'
@@ -18,14 +22,15 @@ steps:
   displayName: 'Initilizer'
   inputs:
     command: 'init'
-    backendServiceArm: 'Aseem-Azure Sub'
-    backendAzureRmResourceGroupName: 'Aseem-Terraform-Training'
-    backendAzureRmStorageAccountName: 'aseemterraformuks'
-    backendAzureRmContainerName: 'aseemterratrain'
-    backendAzureRmKey: 'terraform.tfstate'
-    backendAzureRmResourceGroupLocation: 'uksouth'
-    backendType: 'azurerm'
-    ensureBackend: true 
+    backendServiceArm: $(backendServiceArm)
+    backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
+    backendAzureRmStorageAccountName: $(backendAzureRmStorageAccountName)
+    backendAzureRmContainerName: $(backendAzureRmContainerName)
+    backendAzureRmKey: $(backendAzureRmKey)
+    backendAzureRmResourceGroupLocation: $(backendAzureRmResourceGroupLocation)
+    backendType: $(backendtype)
+    ensureBackend: $(ensurebackend)
+
 - task: TerraformCLI@0
   displayName: 'Validation'
   inputs:
@@ -37,14 +42,14 @@ steps:
   inputs:
     command: 'plan'
     allowTelemetryCollection: true
-    environmentServiceName: 'Aseem-Azure Sub'
+    environmentServiceName: $(backendServiceArm)
 
 - task: TerraformCLI@0
   displayName: 'Apply'
   inputs:
     command: 'apply'
     allowTelemetryCollection: true
-    environmentServiceName: 'Aseem-Azure Sub'
+    environmentServiceName: $(backendServiceArm)
 
 
 
