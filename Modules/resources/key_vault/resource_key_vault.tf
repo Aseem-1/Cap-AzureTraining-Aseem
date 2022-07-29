@@ -36,7 +36,7 @@ resource "azurerm_key_vault" "example_key_vault" {
       "Get",
     ] */
   }
-}
+
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
@@ -60,7 +60,7 @@ resource "azurerm_key_vault_secret" "example" {
   count = var.resource_instance_count
 
   #name                    = "${var.azure_key_vault}-${var.unique_ID}"
-  name                    = "${var.azure_key_vault}-kv"
+  name                    = "${var.azure_key_vault}-kv ${count.index +1}"
   value                   = var.key_vault_password[count.index].result
   key_vault_id            = azurerm_key_vault.example_key_vault.id
 }
