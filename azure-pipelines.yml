@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  -groups: Aseems_backend_variable_group  
+- group: Aseems_backend_variable_group  
 
 
 steps:
