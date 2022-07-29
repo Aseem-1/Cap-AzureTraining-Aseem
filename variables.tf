@@ -5,7 +5,7 @@ variable "location" {
   type        = list(string)
   description = "Azure Region"
   default = ["UK South",
- # "North Europe"
+  "North Europe"
  ]
 }
 
