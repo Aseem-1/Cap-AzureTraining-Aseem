@@ -14,7 +14,10 @@ variables:
 
 
 steps:
--template: terraforminstall.yml
+- task: TerraformInstaller@0
+  displayName: 'Terraform installer'
+  inputs:
+    terraformVersion: 'latest'
 - task: TerraformCLI@0
   displayName: 'Initilizer'
   inputs:
@@ -42,7 +45,7 @@ steps:
     environmentServiceName: $(backendServiceArm)
     commandOptions: '-out planresults.tfplan'
     publishPlanResults: 'Plan results'
-
+jobs:
 - task: TerraformCLI@0
   displayName: 'Apply'
   inputs:
